@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg,#f5f7fa,#c3e7ff); }
+.navbar-brand { font-weight:700; }
+.hero { background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9)); border-radius:16px; }
+.card { border-radius: 12px; }
+.btn { border-radius: 8px; }
+.footer { position: relative; bottom:0; width:100%; }
+.category-row .form-label { font-size:0.85rem; color:#333; }
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <h3>Predicted Allocation for ₹{{ new_budget }}</h3>
+  <table class="table">
+    <thead><tr><th>Category</th><th>Amount (₹)</th></tr></thead>
+    <tbody>
+      {% for k,v in allocation.items() %}
+      <tr><td>{{ k }}</td><td>₹{{ "%.2f"|format(v) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{{ url_for('create') }}" class="btn btn-link">Back to create</a>
+</div>
+{% endblock %}
+

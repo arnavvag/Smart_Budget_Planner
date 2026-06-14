@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Optimization History{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-primary fw-bold">Optimization History</h2>
+
+    {% if history %}
+    <div class="accordion" id="historyAccordion">
+        {% for h in history %}
+        <div class="accordion-item mb-3 shadow-sm border-0 rounded-3">
+            <h2 class="accordion-header" id="heading{{ loop.index }}">
+                <button class="accordion-button collapsed fw-semibold text-dark" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{ loop.index }}" aria-expanded="false"
+                        aria-controls="collapse{{ loop.index }}">
+                    Run #{{ loop.index }} — 
+                    <span class="text-success ms-2">Fitness: {{ "%.4f"|format(h.fitness|default(0)) }}</span>
+                </button>
+            </h2>
+            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse"
+                 aria-labelledby="heading{{ loop.index }}" data-bs-parent="#historyAccordion">
+                <div class="accordion-body bg-light rounded">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-secondary mb-3">Final Allocation:</h5>
+                            {% if h.allocation %}
+                            <ul class="list-group small shadow-sm">
+                                {% for k, v in h.allocation.items() %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>{{ k }}</span>
+                                    <span class="badge bg-primary rounded-pill">₹{{ v }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="text-muted fst-italic">No allocation data available.</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="text-secondary mb-3">Fitness Evolution:</h5>
+                            {% if h.history %}
+                            <canvas id="chart{{ loop.index }}" height="150"></canvas>
+                            {% else %}
+                            <p class="text-muted fst-italic">No fitness data recorded for this run.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-muted mt-5">No optimization runs yet. Run an optimization to view history here!</p>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+{% for h in history %}
+{% if h.history %}
+const ctx{{ loop.index }} = document.getElementById('chart{{ loop.index }}').getContext('2d');
+new Chart(ctx{{ loop.index }}, {
+    type: 'line',
+    data: {
+        labels: [...Array({{ h.history|length }}).keys()].map(i => i+1),
+        datasets: [{
+            label: 'Fitness Over Generations',
+            data: {{ h.history|tojson }},
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { display: false },
+            tooltip: { 
+                mode: 'index', 
+                intersect: false 
+            }
+        },
+        scales: {
+            x: { 
+                display: true,
+                title: { display: true, text: 'Generations', color: '#666' }
+            },
+            y: { 
+                beginAtZero: false,
+                title: { display: true, text: 'Fitness', color: '#666' }
+            }
+        }
+    }
+});
+{% endif %}
+{% endfor %}
+</script>
+{% endblock %}

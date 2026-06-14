@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero p-5 rounded-4 shadow-lg bg-white">
+  <div class="row align-items-center">
+    <div class="col-md-7">
+      <h1 class="display-6">Optimize your monthly budget with Genetic Algorithms</h1>
+      <p class="lead">Smart, personalized allocations. Try presets, add your own categories, and download reports.</p>
+      <a href="{{ url_for('create') }}" class="btn btn-primary btn-lg me-2">Start Now</a>
+      <a href="{{ url_for('about') }}" class="btn btn-outline-secondary btn-lg">Learn More</a>
+    </div>
+    <div class="col-md-5 text-center">
+      <img src="{{ url_for('static', filename='money.svg') }}" alt="money" style="max-width:220px;">
+    </div>
+  </div>
+</div>
+{% endblock %}
+
